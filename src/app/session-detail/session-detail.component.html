@@ -1,0 +1,74 @@
+<h2 class="mb-3">
+    {{ session.title }}
+</h2>
+
+<div class="row mb-3">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                Description
+            </div>
+
+            <div class="card-body">
+                {{ session.description || "(no description)" }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Where and When
+            </div>
+
+            <div class="list-group list-group-flush">
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <strong>Time</strong>
+                        <span>{{ session.time }}</span>
+                    </div>
+                </div>
+
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <strong>Room</strong>
+                        <span>{{ session.room }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="session.speakerName">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                Speaker
+            </div>
+
+            <div class="card-body">
+                <img *ngIf="session.speakerImage"
+                     src="{{ session.speakerImage }}"
+                     alt="{{ session.speakerName }}"
+                     class="img-fluid rounded-circle mx-auto d-block mb-3" />
+
+                <strong>{{ session.speakerName }}</strong>
+                <br />
+                {{ session.speakerTitle }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                Speaker Bio
+            </div>
+
+            <div class="card-body">
+                {{ session.speakerBio }}
+            </div>
+        </div>
+    </div>
+</div>

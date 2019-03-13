@@ -5,11 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SessionListComponent } from './session-list/session-list.component';
+import { SessionDetailComponent } from './session-detail/session-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SessionListComponent
+    SessionListComponent,
+    SessionDetailComponent
   ],
   imports: [
     BrowserModule,

@@ -38,6 +38,34 @@ export class DataService {
         );
     }
 
+    public getSession(id: number): Observable<SessionModel> {
+        if (this.schedule) {
+            let session = this.schedule
+                .map(t => t.sessions)
+                .reduce((s, c) => s.concat(c), [])
+                .find(s => s.id === id);
+
+            return of(session);
+        }
+
+        return this.getSessionsFromApi().pipe(
+            mergeMap(sessions => {
+                return this.getScheduleFromApi().pipe(
+                    map(schedule => {
+                        this.populateSchedule(sessions, schedule);
+
+                        let session = this.schedule
+                            .map(t => t.sessions)
+                            .reduce((s, c) => s.concat(c), [])
+                            .find(s => s.id === id);
+
+                        return session;
+                    })
+                )
+            })
+        );
+    }
+
     private getSessionsFromApi(): Observable<Sessions> {
         return this.http.get<Sessions>(this.sessionsUrl);
     }
@@ -53,7 +81,7 @@ export class DataService {
             day.timeSlots.forEach(timeSlot => {
                 let timeSlotModel: TimeSlotModel = {
                     time: timeSlot.time,
-                    sessions: this.getSessions(timeSlot.sessions, sessions)
+                    sessions: this.getSessions(timeSlot.time, timeSlot.sessions, sessions)
                 };
 
                 this.schedule.push(timeSlotModel);
@@ -61,7 +89,7 @@ export class DataService {
         });
     }
 
-    private getSessions(timeSlotSessions: Session[], sessions: Sessions): SessionModel[] {
+    private getSessions(time: string, timeSlotSessions: Session[], sessions: Sessions): SessionModel[] {
         let sessionModels: SessionModel[] = [];
 
         timeSlotSessions.forEach(timeSlotSession => {
@@ -70,19 +98,18 @@ export class DataService {
             if (session == null)
                 return;
 
+            let speaker = session.speakers.map(sid => sessions.speakers.find(s => s.id == sid))[0];
+
             let sessionModel: SessionModel = {
                 id: timeSlotSession.id,
+                time: time,
                 room: timeSlotSession.scheduledRoom,
                 title: session.title,
                 description: session.description,
-                speakerName: session.speakers
-                    .map(sid => {
-                        let speaker = sessions.speakers.find(s => s.id == sid);
-
-                        return speaker !== null ? speaker.fullName : null;
-                    })
-                    .filter(s => s !== null && s.length)
-                    .join(', ')
+                speakerName: speaker != null ? speaker.fullName : null,
+                speakerTitle: speaker != null ? speaker.tagLine : null,
+                speakerBio: speaker != null ? speaker.bio : null,
+                speakerImage: speaker != null ? speaker.profilePicture : null
             };
 
             sessionModels.push(sessionModel);

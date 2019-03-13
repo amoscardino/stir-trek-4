@@ -1,9 +1,9 @@
-<div *ngFor="let timeSlot of timeSlots" class="mb-3">
+<div *ngFor="let timeSlot of timeSlots" class="mb-4">
     <h3>{{ timeSlot.time }}</h3>
 
     <div class="list-group">
         <a *ngFor="let session of timeSlot.sessions"
-           routerLink="/sessions"
+           routerLink="/sessions/{{ session.id }}"
            class="list-group-item list-group-item-action">
             <div class="row">
                 <div class="col-sm-8 col-lg-6">
