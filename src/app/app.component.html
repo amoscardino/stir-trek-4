@@ -1,7 +1,14 @@
-<div class="container">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
+<div class="container my-3">
+    <nav class="navbar navbar-dark bg-dark mb-3">
+        <a class="navbar-brand" routerLink="/sessions">
+            Stir Trek
+        </a>
+    </nav>
 
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
+
+    <footer class="mt-5">
+        <hr />
+        &copy; 2019 Andrew Moscardino
+    </footer>
 </div>
