@@ -1,11 +1,15 @@
-<div class="container my-3">
-    <nav class="navbar navbar-dark bg-dark mb-3">
+<nav class="navbar navbar-dark mb-3">
+    <div class="container">
         <a class="navbar-brand" routerLink="/sessions">
             Stir Trek
         </a>
-    </nav>
+    </div>
+</nav>
 
-    <router-outlet></router-outlet>
+<div class="container">
+    <main>
+        <router-outlet></router-outlet>
+    </main>
 
     <footer class="mt-5">
         <hr />
