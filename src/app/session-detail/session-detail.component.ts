@@ -11,7 +11,8 @@ import { ActivatedRoute } from '@angular/router';
 export class SessionDetailComponent implements OnInit {
     private data: DataService;
     private route: ActivatedRoute;
-    private session: SessionModel;
+
+    public session: SessionModel;
 
     constructor(data: DataService, route: ActivatedRoute) {
         this.data = data;
