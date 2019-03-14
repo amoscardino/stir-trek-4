@@ -64,6 +64,21 @@ export class DataService {
         );
     }
 
+    public saveSession(id: number): void {
+        let savedIds = this.getSavedSessionIds();
+
+        if (savedIds.indexOf(id) === -1)
+            savedIds.push(id);
+
+        this.updateSavedSessionIds(savedIds);
+    }
+
+    public removeSavedSession(id: number){
+        let savedIds = this.getSavedSessionIds().filter(x => x != id);
+
+        this.updateSavedSessionIds(savedIds);
+    }
+
     private getSessionsFromApi(): Observable<Sessions> {
         const sessionsUrl: string = 'https://raw.githubusercontent.com/stirtrek/stirtrek.github.io/source/source/_data/sessions2019.json';
 
@@ -112,7 +127,7 @@ export class DataService {
                 speakerTitle: speaker != null ? speaker.tagLine : null,
                 speakerBio: speaker != null ? speaker.bio : null,
                 speakerImage: speaker != null ? speaker.profilePicture : null,
-                isSaved: false
+                isSaved: this.getSavedSessionIds().indexOf(timeSlotSession.id) !== -1
             };
 
             sessionModels.push(sessionModel);
@@ -120,8 +135,20 @@ export class DataService {
 
         return sessionModels;
     }
-}
 
+    private getSavedSessionIds(): number[] {
+        let savedIds = localStorage.getItem("st-saved-sessions") || "";
+
+        return savedIds
+            .split(',')
+            .filter(x => x.length)
+            .map(x => +x);
+    }
+
+    private updateSavedSessionIds(ids: number[]): void {
+        localStorage.setItem("st-saved-sessions", ids.join(','));
+    }
+}
 
 interface Schedule {
     scheduledSessions: ScheduledSession[];
