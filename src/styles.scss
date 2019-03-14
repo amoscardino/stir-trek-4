@@ -1,5 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
 
 $enable-shadows: true;
 
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+html {
+    background-color: #770477;
+}
+
+html,
+body {
+    min-height: 100vh;
+}
+
+nav.navbar {
+    background-color: #770477;
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data/data.service';
 import { SessionModel } from '../data/data.models';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-session-detail',
@@ -10,12 +10,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SessionDetailComponent implements OnInit {
     private data: DataService;
+    private router: Router;
     private route: ActivatedRoute;
 
     public session: SessionModel;
 
-    constructor(data: DataService, route: ActivatedRoute) {
+    constructor(data: DataService, router: Router, route: ActivatedRoute) {
         this.data = data;
+        this.router = router;
         this.route = route;
 
         this.session = <SessionModel>{};
@@ -38,4 +40,7 @@ export class SessionDetailComponent implements OnInit {
             this.data.removeSavedSession(this.session.id);
     }
 
+    public backToList(): void {
+        this.router.navigate(['../'], { relativeTo: this.route });
+    }
 }

@@ -1,14 +1,25 @@
-<div class="d-sm-flex justify-content-between align-items-start mb-3">
-    <h1>
-        {{ session.title }}
-    </h1>
+<h1 class="my-4">
+    {{ session.title }}
+</h1>
 
-    <button class="btn px-4"
-            [class.btn-primary]="!session.isSaved"
-            [class.btn-secondary]="session.isSaved"
-            (click)="toggleSaved()">
-        {{ session.isSaved ? 'Remove' : 'Save' }}
-    </button>
+<div class="navbar navbar-light bg-white border rounded mb-4 shadow-sm">
+    <div class="form-inline">
+        <button type="button"
+                class="btn btn-outline-secondary"
+                (click)="backToList()">
+            Back
+        </button>
+    </div>
+
+    <div class="form-inline">
+        <button type="button"
+                class="btn"
+                [class.btn-success]="session.isSaved"
+                [class.btn-primary]="!session.isSaved"
+                (click)="toggleSaved()">
+            {{ session.isSaved ? 'Saved' : 'Save' }}
+        </button>
+    </div>
 </div>
 
 <div class="row">
