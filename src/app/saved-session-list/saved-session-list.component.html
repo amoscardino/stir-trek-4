@@ -1,0 +1,23 @@
+<div *ngFor="let timeSlot of timeSlots" class="mb-5">
+    <h3>{{ timeSlot.time }}</h3>
+
+    <div class="list-group shadow-sm">
+        <a *ngFor="let session of timeSlot.sessions"
+           routerLink="/schedule/{{ session.id }}"
+           class="list-group-item list-group-item-action">
+            <div class="row">
+                <div class="col-sm-8 col-lg-6">
+                    <strong>{{ session.title }}</strong>
+                </div>
+
+                <div class="col-sm-4 col-lg-3">
+                    {{ session.speakerName }}
+                </div>
+
+                <div class="col-lg-3 d-none d-lg-block">
+                    {{ session.room }}
+                </div>
+            </div>
+        </a>
+    </div>
+</div>

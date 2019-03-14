@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SessionListComponent } from './session-list/session-list.component';
 import { SessionDetailComponent } from './session-detail/session-detail.component';
+import { SavedSessionListComponent } from './saved-session-list/saved-session-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SessionListComponent,
-    SessionDetailComponent
+    SessionDetailComponent,
+    SavedSessionListComponent
   ],
   imports: [
     BrowserModule,

@@ -22,9 +22,20 @@ export class SessionDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        let id = +this.route.snapshot.paramMap.get('id');
+        this.route.paramMap.subscribe(params => {
+            let id = +params.get('id');
 
-        this.data.getSession(id).subscribe(session => this.session = session);
+            this.data.getSession(id).subscribe(session => this.session = session);
+        });
+    }
+
+    public toggleSaved(): void {
+        this.session.isSaved = !this.session.isSaved;
+
+        if (this.session.isSaved)
+            this.data.saveSession(this.session.id);
+        else
+            this.data.removeSavedSession(this.session.id);
     }
 
 }

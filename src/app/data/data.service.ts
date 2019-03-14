@@ -36,6 +36,38 @@ export class DataService {
         );
     }
 
+    public getSavedSessionList(): Observable<TimeSlotModel[]> {
+        if (this.schedule) {
+            return of(this.schedule
+                .map(timeSlot => {
+                    return <TimeSlotModel> {
+                        time: timeSlot.time,
+                        sessions: timeSlot.sessions.filter(session => session.isSaved)
+                    };
+                })
+                .filter(timeSlot => timeSlot.sessions.length));
+        }
+
+        return this.getSessionsFromApi().pipe(
+            mergeMap(sessions => {
+                return this.getScheduleFromApi().pipe(
+                    map(schedule => {
+                        this.populateSchedule(sessions, schedule);
+
+                        return this.schedule
+                            .map(timeSlot => {
+                                return <TimeSlotModel> {
+                                    time: timeSlot.time,
+                                    sessions: timeSlot.sessions.filter(session => session.isSaved)
+                                };
+                            })
+                            .filter(timeSlot => timeSlot.sessions.length);
+                    })
+                )
+            })
+        );
+    }
+
     public getSession(id: number): Observable<SessionModel> {
         if (this.schedule) {
             let session = this.schedule
@@ -70,11 +102,25 @@ export class DataService {
         if (savedIds.indexOf(id) === -1)
             savedIds.push(id);
 
+        this.schedule.forEach(timeSlots => {
+            timeSlots.sessions.forEach(session => {
+                if (session.id == id)
+                    session.isSaved = true;
+            });
+        });
+
         this.updateSavedSessionIds(savedIds);
     }
 
-    public removeSavedSession(id: number){
+    public removeSavedSession(id: number) {
         let savedIds = this.getSavedSessionIds().filter(x => x != id);
+
+        this.schedule.forEach(timeSlots => {
+            timeSlots.sessions.forEach(session => {
+                if (session.id == id)
+                    session.isSaved = false;
+            });
+        });
 
         this.updateSavedSessionIds(savedIds);
     }

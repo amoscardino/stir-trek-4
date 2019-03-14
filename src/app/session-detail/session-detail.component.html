@@ -1,6 +1,15 @@
-<h1 class="my-4">
-    {{ session.title }}
-</h1>
+<div class="d-sm-flex justify-content-between align-items-start mb-3">
+    <h1>
+        {{ session.title }}
+    </h1>
+
+    <button class="btn px-4"
+            [class.btn-primary]="!session.isSaved"
+            [class.btn-secondary]="session.isSaved"
+            (click)="toggleSaved()">
+        {{ session.isSaved ? 'Remove' : 'Save' }}
+    </button>
+</div>
 
 <div class="row">
     <div class="col-md-8">
@@ -49,8 +58,8 @@
 
             <div class="card-body">
                 <img *ngIf="session.speakerImage"
-                     src="{{ session.speakerImage }}"
-                     alt="{{ session.speakerName }}"
+                     [src]="session.speakerImage"
+                     [alt]="session.speakerName"
                      class="img-fluid rounded-circle w-75 mx-auto d-block mb-3" />
 
                 <strong>{{ session.speakerName }}</strong>
