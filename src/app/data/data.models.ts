@@ -13,4 +13,6 @@ export interface SessionModel {
     speakerTitle: string;
     speakerBio: string;
     speakerImage: string;
+
+    isSaved: boolean;
 }

@@ -13,8 +13,6 @@ const httpOptions = {
 })
 export class DataService {
     private http: HttpClient;
-    private sessionsUrl: string = 'https://raw.githubusercontent.com/stirtrek/stirtrek.github.io/source/source/_data/sessions2019.json';
-    private scheduleUrl: string = 'https://raw.githubusercontent.com/stirtrek/stirtrek.github.io/source/source/_data/schedule2019.json';
     private schedule: TimeSlotModel[];
 
     constructor(http: HttpClient) {
@@ -67,11 +65,15 @@ export class DataService {
     }
 
     private getSessionsFromApi(): Observable<Sessions> {
-        return this.http.get<Sessions>(this.sessionsUrl);
+        const sessionsUrl: string = 'https://raw.githubusercontent.com/stirtrek/stirtrek.github.io/source/source/_data/sessions2019.json';
+
+        return this.http.get<Sessions>(sessionsUrl);
     }
 
     private getScheduleFromApi(): Observable<Schedule> {
-        return this.http.get<Schedule>(this.scheduleUrl);
+        const scheduleUrl: string = 'https://raw.githubusercontent.com/stirtrek/stirtrek.github.io/source/source/_data/schedule2019.json';
+
+        return this.http.get<Schedule>(scheduleUrl);
     }
 
     private populateSchedule(sessions: Sessions, schedule: Schedule): void {
@@ -81,7 +83,7 @@ export class DataService {
             day.timeSlots.forEach(timeSlot => {
                 let timeSlotModel: TimeSlotModel = {
                     time: timeSlot.time,
-                    sessions: this.getSessions(timeSlot.time, timeSlot.sessions, sessions)
+                    sessions: this.getSessions(timeSlot, sessions)
                 };
 
                 this.schedule.push(timeSlotModel);
@@ -89,10 +91,10 @@ export class DataService {
         });
     }
 
-    private getSessions(time: string, timeSlotSessions: Session[], sessions: Sessions): SessionModel[] {
+    private getSessions(timeSlot: TimeSlot, sessions: Sessions): SessionModel[] {
         let sessionModels: SessionModel[] = [];
 
-        timeSlotSessions.forEach(timeSlotSession => {
+        timeSlot.sessions.forEach(timeSlotSession => {
             let session = sessions.sessions.find(s => s.id == timeSlotSession.id);
 
             if (session == null)
@@ -102,14 +104,15 @@ export class DataService {
 
             let sessionModel: SessionModel = {
                 id: timeSlotSession.id,
-                time: time,
+                time: timeSlot.time,
                 room: timeSlotSession.scheduledRoom,
                 title: session.title,
                 description: session.description,
                 speakerName: speaker != null ? speaker.fullName : null,
                 speakerTitle: speaker != null ? speaker.tagLine : null,
                 speakerBio: speaker != null ? speaker.bio : null,
-                speakerImage: speaker != null ? speaker.profilePicture : null
+                speakerImage: speaker != null ? speaker.profilePicture : null,
+                isSaved: false
             };
 
             sessionModels.push(sessionModel);
