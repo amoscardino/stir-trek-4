@@ -21,3 +21,7 @@
         </a>
     </div>
 </div>
+
+<div *ngIf="!this.timeSlots.length" class="text-center mt-4 mb-5">
+    Unable to load sessions. This either means they are loading slowly or failed to load.
+</div>
