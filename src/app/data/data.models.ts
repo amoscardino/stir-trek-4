@@ -5,14 +5,24 @@ export interface TimeSlotModel {
 
 export interface SessionModel {
     id: number;
-    time: string;
-    room: string;
+
     title: string;
     description: string;
+
+    time: string;
+    room: string;
+    track: string;
+
     speakerName: string;
     speakerTitle: string;
     speakerBio: string;
     speakerImage: string;
+    speakerLinks?: SpeakerLinkModel[];
 
     isSaved: boolean;
+}
+
+export interface SpeakerLinkModel {
+    title: string;
+    url: string;
 }

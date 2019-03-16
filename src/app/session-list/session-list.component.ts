@@ -14,6 +14,8 @@ export class SessionListComponent implements OnInit {
 
     constructor(dataService: DataService) {
         this.dataService = dataService;
+
+        this.timeSlots = <TimeSlotModel[]>[];
     }
 
     public ngOnInit(): void {

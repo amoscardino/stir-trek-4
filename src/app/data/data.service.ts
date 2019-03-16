@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SessionModel, TimeSlotModel } from './data.models'
+import { SessionModel, TimeSlotModel, SpeakerLinkModel } from './data.models'
 import { Observable, of } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -40,7 +40,7 @@ export class DataService {
         if (this.schedule) {
             return of(this.schedule
                 .map(timeSlot => {
-                    return <TimeSlotModel> {
+                    return <TimeSlotModel>{
                         time: timeSlot.time,
                         sessions: timeSlot.sessions.filter(session => session.isSaved)
                     };
@@ -56,7 +56,7 @@ export class DataService {
 
                         return this.schedule
                             .map(timeSlot => {
-                                return <TimeSlotModel> {
+                                return <TimeSlotModel>{
                                     time: timeSlot.time,
                                     sessions: timeSlot.sessions.filter(session => session.isSaved)
                                 };
@@ -162,24 +162,49 @@ export class DataService {
                 return;
 
             let speaker = session.speakers.map(sid => sessions.speakers.find(s => s.id == sid))[0];
+            let track = <string>null;
+
+            if (session.categoryItems != null && session.categoryItems.length) {
+                track = sessions.categories
+                    .filter(c => c.title === 'Track')[0]
+                    .items
+                    .filter(ci => ci.id == session.categoryItems[0])
+                    .map(ci => ci.name.split('(')[0])[0];
+            }
 
             let sessionModel: SessionModel = {
                 id: timeSlotSession.id,
-                time: timeSlot.time,
-                room: timeSlotSession.scheduledRoom,
+
                 title: session.title,
                 description: session.description,
+
+                time: timeSlot.time,
+                room: timeSlotSession.scheduledRoom,
+                track: track,
+
                 speakerName: speaker != null ? speaker.fullName : null,
                 speakerTitle: speaker != null ? speaker.tagLine : null,
                 speakerBio: speaker != null ? speaker.bio : null,
                 speakerImage: speaker != null ? speaker.profilePicture : null,
+                speakerLinks: speaker != null ? speaker.links
+                    .map(link => <SpeakerLinkModel>{
+                        title: link.title,
+                        url: link.url
+                    }) : null,
+
                 isSaved: this.getSavedSessionIds().indexOf(timeSlotSession.id) !== -1
             };
 
             sessionModels.push(sessionModel);
         });
 
-        return sessionModels;
+        return sessionModels.sort((a, b) => {
+            return (a.track.toUpperCase() > b.track.toUpperCase())
+                ? 1
+                : (a.track.toUpperCase() < b.track.toUpperCase())
+                    ? -1
+                    : 0;
+        });
     }
 
     private getSavedSessionIds(): number[] {
@@ -213,6 +238,7 @@ interface TimeSlot {
 interface Sessions {
     sessions: Session[];
     speakers: Speaker[];
+    categories: Category[];
 }
 
 interface Session {
@@ -220,6 +246,7 @@ interface Session {
     title: string;
     description: string;
     speakers: string[];
+    categoryItems?: number[];
     scheduledRoom: string;
 }
 
@@ -237,4 +264,17 @@ interface Link {
     title: string;
     url: string;
     linkType: string;
+}
+
+interface Category {
+    id: number;
+    title: string;
+    items: CategoryItem[];
+    sort: number;
+}
+
+interface CategoryItem {
+    id: number;
+    name: string;
+    sort: number;
 }

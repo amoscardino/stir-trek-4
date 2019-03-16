@@ -44,15 +44,38 @@
             <div class="list-group list-group-flush">
                 <div class="list-group-item">
                     <div class="d-flex w-100 justify-content-between">
-                        <strong>Time</strong>
-                        <span>{{ session.time }}</span>
+                        <strong class="mr-3">
+                            Time
+                        </strong>
+
+                        <span class="text-right">
+                            {{ session.time }}
+                        </span>
                     </div>
                 </div>
 
                 <div class="list-group-item">
                     <div class="d-flex w-100 justify-content-between">
-                        <strong>Room</strong>
-                        <span>{{ session.room }}</span>
+                        <strong class="mr-3">
+                            Room
+
+                        </strong>
+
+                        <span class="text-right">
+                            {{ session.room }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <strong class="mr-3">
+                            Track
+                        </strong>
+
+                        <span class="text-right">
+                            {{ session.track }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -71,16 +94,16 @@
                 <img *ngIf="session.speakerImage"
                      [src]="session.speakerImage"
                      [alt]="session.speakerName"
-                     class="img-fluid rounded-circle w-75 mx-auto d-block mb-3" />
+                     class="img-fluid rounded-circle w-75 mx-auto d-block mb-4" />
 
-                <strong>{{ session.speakerName }}</strong>
-                <br />
+                <strong class="d-block">{{ session.speakerName }}</strong>
                 {{ session.speakerTitle }}
             </div>
         </div>
     </div>
 
-    <div class="col-md-9">
+    <div [class.col-md-6]="session.speakerLinks !== null && session.speakerLinks.length"
+         [class.col-md-9]="session.speakerLinks === null || !session.speakerLinks.length">
         <div class="card mb-4 shadow-sm">
             <div class="card-header">
                 Speaker Bio
@@ -88,6 +111,22 @@
 
             <div class="card-body">
                 {{ session.speakerBio }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3" *ngIf="session.speakerLinks !== null && session.speakerLinks.length">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                Speaker Links
+            </div>
+
+            <div class="list-group list-group-flush">
+                <a *ngFor="let link of session.speakerLinks"
+                   class="list-group-item list-group-item-action"
+                   [href]="link.url" target="_blank">
+                    {{ link.title }}
+                </a>
             </div>
         </div>
     </div>
