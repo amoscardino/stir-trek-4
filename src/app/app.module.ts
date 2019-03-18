@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { SessionListComponent } from './session-list/session-list.component';
 import { SessionDetailComponent } from './session-detail/session-detail.component';
 import { SavedSessionListComponent } from './saved-session-list/saved-session-list.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { SavedSessionListComponent } from './saved-session-list/saved-session-li
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
