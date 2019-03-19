@@ -41,6 +41,6 @@ export class SessionDetailComponent implements OnInit {
     }
 
     public backToList(): void {
-        this.router.navigate(['../'], { relativeTo: this.route });
+        this.router.navigate(['../'], { relativeTo: this.route, fragment: this.session.timeId });
     }
 }

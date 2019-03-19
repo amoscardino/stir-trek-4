@@ -144,6 +144,7 @@ export class DataService {
             day.timeSlots.forEach(timeSlot => {
                 let timeSlotModel: TimeSlotModel = {
                     time: timeSlot.time,
+                    timeId: this.getTimeId(timeSlot.time),
                     sessions: this.getSessions(timeSlot, sessions)
                 };
 
@@ -179,6 +180,7 @@ export class DataService {
                 description: session.description,
 
                 time: timeSlot.time,
+                timeId: this.getTimeId(timeSlot.time),
                 room: timeSlotSession.scheduledRoom,
                 track: track,
 
@@ -218,6 +220,10 @@ export class DataService {
 
     private updateSavedSessionIds(ids: number[]): void {
         localStorage.setItem("st-saved-sessions", ids.join(','));
+    }
+
+    private getTimeId(time: string): string {
+        return `T${time.replace(/[^A-Za-z\d]/ig, '')}`;
     }
 }
 

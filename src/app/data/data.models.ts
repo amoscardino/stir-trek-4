@@ -1,5 +1,6 @@
 export interface TimeSlotModel {
     time: string;
+    timeId: string;
     sessions: SessionModel[];
 }
 
@@ -10,6 +11,7 @@ export interface SessionModel {
     description: string;
 
     time: string;
+    timeId: string;
     room: string;
     track: string;
 
