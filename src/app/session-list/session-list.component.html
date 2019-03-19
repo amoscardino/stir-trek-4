@@ -4,9 +4,10 @@
     <div class="list-group shadow-sm">
         <a *ngFor="let session of timeSlot.sessions"
            routerLink="/sessions/{{ session.id }}"
-           class="list-group-item list-group-item-action">
+           class="list-group-item list-group-item-action"
+           [class.list-group-item-info]="session.isSaved">
             <div class="row">
-                <div class="col-sm-8 col-lg-6">
+                <div class="col-sm-8 col-lg-6 align-top">
                     <strong>{{ session.title }}</strong>
                 </div>
 
