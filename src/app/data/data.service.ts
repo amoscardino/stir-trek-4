@@ -42,6 +42,7 @@ export class DataService {
                 .map(timeSlot => {
                     return <TimeSlotModel>{
                         time: timeSlot.time,
+                        timeId: timeSlot.timeId,
                         sessions: timeSlot.sessions.filter(session => session.isSaved)
                     };
                 })

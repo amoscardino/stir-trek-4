@@ -1,5 +1,5 @@
 <div *ngFor="let timeSlot of timeSlots" class="mb-5">
-    <h3 id="S{{ timeSlot.timeId }}">{{ timeSlot.time }}</h3>
+    <h3 id="{{ timeSlot.timeId }}">{{ timeSlot.time }}</h3>
 
     <div class="list-group shadow-sm">
         <a *ngFor="let session of timeSlot.sessions"
