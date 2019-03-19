@@ -29,7 +29,7 @@ export class SavedSessionListComponent implements OnInit {
         let tree = this.router.parseUrl(this.router.url);
 
         if (tree.fragment) {
-            let element = document.querySelector("#" + tree.fragment);
+            let element = document.querySelector("#S" + tree.fragment);
 
             if (element)
                 element.scrollIntoView();
