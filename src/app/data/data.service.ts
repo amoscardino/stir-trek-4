@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SessionModel, TimeSlotModel, SpeakerLinkModel } from './data.models'
+import { SessionModel, TimeSlotModel, SpeakerLinkModel } from './data.models';
 import { Observable, of } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -31,7 +31,7 @@ export class DataService {
 
                         return this.schedule;
                     })
-                )
+                );
             })
         );
     }
@@ -40,11 +40,11 @@ export class DataService {
         if (this.schedule) {
             return of(this.schedule
                 .map(timeSlot => {
-                    return <TimeSlotModel>{
+                    return {
                         time: timeSlot.time,
                         timeId: timeSlot.timeId,
                         sessions: timeSlot.sessions.filter(session => session.isSaved)
-                    };
+                    } as TimeSlotModel;
                 })
                 .filter(timeSlot => timeSlot.sessions.length));
         }
@@ -57,21 +57,22 @@ export class DataService {
 
                         return this.schedule
                             .map(timeSlot => {
-                                return <TimeSlotModel>{
+                                return {
                                     time: timeSlot.time,
+                                    timeId: this.getTimeId(timeSlot.time),
                                     sessions: timeSlot.sessions.filter(session => session.isSaved)
-                                };
+                                } as TimeSlotModel;
                             })
                             .filter(timeSlot => timeSlot.sessions.length);
                     })
-                )
+                );
             })
         );
     }
 
     public getSession(id: number): Observable<SessionModel> {
         if (this.schedule) {
-            let session = this.schedule
+            const session = this.schedule
                 .map(t => t.sessions)
                 .reduce((s, c) => s.concat(c), [])
                 .find(s => s.id === id);
@@ -85,27 +86,27 @@ export class DataService {
                     map(schedule => {
                         this.populateSchedule(sessions, schedule);
 
-                        let session = this.schedule
+                        const session = this.schedule
                             .map(t => t.sessions)
                             .reduce((s, c) => s.concat(c), [])
                             .find(s => s.id === id);
 
                         return session;
                     })
-                )
+                );
             })
         );
     }
 
     public saveSession(id: number): void {
-        let savedIds = this.getSavedSessionIds();
+        const savedIds = this.getSavedSessionIds();
 
         if (savedIds.indexOf(id) === -1)
             savedIds.push(id);
 
         this.schedule.forEach(timeSlots => {
             timeSlots.sessions.forEach(session => {
-                if (session.id == id)
+                if (session.id === id)
                     session.isSaved = true;
             });
         });
@@ -114,11 +115,11 @@ export class DataService {
     }
 
     public removeSavedSession(id: number) {
-        let savedIds = this.getSavedSessionIds().filter(x => x != id);
+        const savedIds = this.getSavedSessionIds().filter(x => x !== id);
 
         this.schedule.forEach(timeSlots => {
             timeSlots.sessions.forEach(session => {
-                if (session.id == id)
+                if (session.id === id)
                     session.isSaved = false;
             });
         });
@@ -127,13 +128,13 @@ export class DataService {
     }
 
     private getSessionsFromApi(): Observable<Sessions> {
-        const sessionsUrl: string = 'https://raw.githubusercontent.com/stirtrek/stirtrek.github.io/source/source/_data/sessions2019.json';
+        const sessionsUrl = 'https://raw.githubusercontent.com/stirtrek/stirtrek.github.io/source/source/_data/sessions2019.json';
 
         return this.http.get<Sessions>(sessionsUrl);
     }
 
     private getScheduleFromApi(): Observable<Schedule> {
-        const scheduleUrl: string = 'https://raw.githubusercontent.com/stirtrek/stirtrek.github.io/source/source/_data/schedule2019.json';
+        const scheduleUrl = 'https://raw.githubusercontent.com/stirtrek/stirtrek.github.io/source/source/_data/schedule2019.json';
 
         return this.http.get<Schedule>(scheduleUrl);
     }
@@ -143,7 +144,7 @@ export class DataService {
 
         schedule.scheduledSessions.forEach(day => {
             day.timeSlots.forEach(timeSlot => {
-                let timeSlotModel: TimeSlotModel = {
+                const timeSlotModel: TimeSlotModel = {
                     time: timeSlot.time,
                     timeId: this.getTimeId(timeSlot.time),
                     sessions: this.getSessions(timeSlot, sessions)
@@ -155,26 +156,26 @@ export class DataService {
     }
 
     private getSessions(timeSlot: TimeSlot, sessions: Sessions): SessionModel[] {
-        let sessionModels: SessionModel[] = [];
+        const sessionModels: SessionModel[] = [];
 
         timeSlot.sessions.forEach(timeSlotSession => {
-            let session = sessions.sessions.find(s => s.id == timeSlotSession.id);
+            const session = sessions.sessions.find(s => s.id === timeSlotSession.id);
 
             if (session == null)
                 return;
 
-            let speaker = session.speakers.map(sid => sessions.speakers.find(s => s.id == sid))[0];
-            let track = <string>null;
+            const speaker = session.speakers.map(sid => sessions.speakers.find(s => s.id === sid))[0];
+            let trackName = null as string;
 
             if (session.categoryItems != null && session.categoryItems.length) {
-                track = sessions.categories
+                trackName = sessions.categories
                     .filter(c => c.title === 'Track')[0]
                     .items
-                    .filter(ci => ci.id == session.categoryItems[0])
+                    .filter(ci => ci.id === session.categoryItems[0])
                     .map(ci => ci.name.split('(')[0])[0];
             }
 
-            let sessionModel: SessionModel = {
+            const sessionModel = {
                 id: timeSlotSession.id,
 
                 title: session.title,
@@ -183,20 +184,22 @@ export class DataService {
                 time: timeSlot.time,
                 timeId: this.getTimeId(timeSlot.time),
                 room: timeSlotSession.scheduledRoom,
-                track: track,
+                track: trackName,
 
                 speakerName: speaker != null ? speaker.fullName : null,
                 speakerTitle: speaker != null ? speaker.tagLine : null,
                 speakerBio: speaker != null ? speaker.bio : null,
                 speakerImage: speaker != null ? speaker.profilePicture : null,
                 speakerLinks: speaker != null ? speaker.links
-                    .map(link => <SpeakerLinkModel>{
-                        title: link.title,
-                        url: link.url
+                    .map(link => {
+                        return {
+                            title: link.title,
+                            url: link.url
+                        } as SpeakerLinkModel;
                     }) : null,
 
                 isSaved: this.getSavedSessionIds().indexOf(timeSlotSession.id) !== -1
-            };
+            } as SessionModel;
 
             sessionModels.push(sessionModel);
         });
@@ -211,7 +214,7 @@ export class DataService {
     }
 
     private getSavedSessionIds(): number[] {
-        let savedIds = localStorage.getItem("st-saved-sessions") || "";
+        const savedIds = localStorage.getItem('st-saved-sessions') || '';
 
         return savedIds
             .split(',')
@@ -220,7 +223,7 @@ export class DataService {
     }
 
     private updateSavedSessionIds(ids: number[]): void {
-        localStorage.setItem("st-saved-sessions", ids.join(','));
+        localStorage.setItem('st-saved-sessions', ids.join(','));
     }
 
     private getTimeId(time: string): string {

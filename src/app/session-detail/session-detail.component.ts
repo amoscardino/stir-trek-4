@@ -20,12 +20,12 @@ export class SessionDetailComponent implements OnInit {
         this.router = router;
         this.route = route;
 
-        this.session = <SessionModel>{};
+        this.session = {} as SessionModel;
     }
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
-            let id = +params.get('id');
+            const id = +params.get('id');
 
             this.data.getSession(id).subscribe(session => this.session = session);
         });

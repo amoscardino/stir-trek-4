@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { DataService } from '../data/data.service';
 import { TimeSlotModel } from '../data/data.models';
 import { Router } from '@angular/router';
@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
     templateUrl: './saved-session-list.component.html',
     styleUrls: ['./saved-session-list.component.scss']
 })
-export class SavedSessionListComponent implements OnInit {
+export class SavedSessionListComponent implements OnInit, AfterViewChecked {
     private dataService: DataService;
     private router: Router;
 
@@ -18,7 +18,7 @@ export class SavedSessionListComponent implements OnInit {
         this.dataService = dataService;
         this.router = router;
 
-        this.timeSlots = <TimeSlotModel[]>[];
+        this.timeSlots = [];
     }
 
     public ngOnInit(): void {
@@ -26,10 +26,10 @@ export class SavedSessionListComponent implements OnInit {
     }
 
     public ngAfterViewChecked(): void {
-        let tree = this.router.parseUrl(this.router.url);
+        const tree = this.router.parseUrl(this.router.url);
 
         if (tree.fragment) {
-            let element = document.querySelector("#" + tree.fragment);
+            const element = document.querySelector('#' + tree.fragment);
 
             if (element)
                 element.scrollIntoView();
