@@ -26,10 +26,10 @@ export class SessionListComponent implements OnInit, AfterViewChecked {
     }
 
     public ngAfterViewChecked(): void {
-        const tree = this.router.parseUrl(this.router.url);
+        let tree = this.router.parseUrl(this.router.url);
 
         if (tree.fragment) {
-            const element = document.querySelector('#' + tree.fragment);
+            let element = document.querySelector('#' + tree.fragment);
 
             if (element)
                 element.scrollIntoView();

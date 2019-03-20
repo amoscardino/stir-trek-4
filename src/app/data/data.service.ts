@@ -159,12 +159,14 @@ export class DataService {
         const sessionModels: SessionModel[] = [];
 
         timeSlot.sessions.forEach(timeSlotSession => {
-            const session = sessions.sessions.find(s => s.id === timeSlotSession.id);
+            // tslint:disable-next-line: triple-equals
+            const session = sessions.sessions.find(s => s.id == timeSlotSession.id);
 
-            if (session == null)
+            if (typeof session === 'undefined')
                 return;
 
             const speaker = session.speakers.map(sid => sessions.speakers.find(s => s.id === sid))[0];
+            const hasSpeaker = typeof speaker !== 'undefined';
             let trackName = null as string;
 
             if (session.categoryItems != null && session.categoryItems.length) {
@@ -186,11 +188,11 @@ export class DataService {
                 room: timeSlotSession.scheduledRoom,
                 track: trackName,
 
-                speakerName: speaker != null ? speaker.fullName : null,
-                speakerTitle: speaker != null ? speaker.tagLine : null,
-                speakerBio: speaker != null ? speaker.bio : null,
-                speakerImage: speaker != null ? speaker.profilePicture : null,
-                speakerLinks: speaker != null ? speaker.links
+                speakerName: hasSpeaker ? speaker.fullName : null,
+                speakerTitle: hasSpeaker ? speaker.tagLine : null,
+                speakerBio: hasSpeaker ? speaker.bio : null,
+                speakerImage: hasSpeaker ? speaker.profilePicture : null,
+                speakerLinks: hasSpeaker ? speaker.links
                     .map(link => {
                         return {
                             title: link.title,
