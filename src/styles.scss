@@ -4,11 +4,7 @@ $enable-shadows: true;
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 html,
-body {
-    min-height: 100vh;
-    background-color: #770477;
-}
-
+body,
 nav.navbar {
     background-color: #770477;
 }
