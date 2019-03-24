@@ -12,3 +12,14 @@ nav.navbar {
 .pt-safe {
     padding-top: env(safe-area-inset-top);
 }
+
+nav.navbar:before {
+    content: "";
+    position: absolute;
+    height: 100px;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+
+    background-color: #770477;
+}
