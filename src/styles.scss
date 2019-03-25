@@ -1,26 +1,14 @@
-
 $enable-shadows: true;
 
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 html,
 body,
-nav.navbar {
-    background-color: #770477;
+nav.navbar,
+.navbar-wrapper {
+  background-color: #770477;
 }
 
 .pt-safe {
-    padding-top: env(safe-area-inset-top);
-}
-
-nav.navbar:before {
-    content: "";
-    position: absolute;
-    height: 100px;
-    left: 0;
-    right: 0;
-    bottom: 100%;
-    z-index: 1;
-
-    background-color: #770477;
+  padding-top: env(safe-area-inset-top);
 }
