@@ -7,3 +7,8 @@ body,
 nav.navbar {
   background-color: #770477;
 }
+
+.overflow-scroll {
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
