@@ -4,11 +4,6 @@ $enable-shadows: true;
 
 html,
 body,
-nav.navbar,
-.navbar-wrapper {
+nav.navbar {
   background-color: #770477;
-}
-
-.pt-safe {
-  padding-top: env(safe-area-inset-top);
 }
