@@ -32,7 +32,7 @@ export class SavedSessionListComponent implements OnInit, AfterViewChecked {
             const element = document.querySelector('#' + tree.fragment);
 
             if (element)
-                element.scrollIntoView();
+                window.scroll({ top: element.getBoundingClientRect().top + window.scrollY - 72 });
         }
     }
 }
