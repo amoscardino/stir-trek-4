@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SessionModel, TimeSlotModel, SpeakerLinkModel } from './data.models';
+import { SessionModel, TimeSlotModel, SpeakerLinkModel, TheatreModel } from './data.models';
 import { Observable, of } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 
@@ -185,8 +185,9 @@ export class DataService {
 
                 time: timeSlot.time,
                 timeId: this.getTimeId(timeSlot.time),
-                room: timeSlotSession.scheduledRoom,
                 track: trackName,
+                room: timeSlotSession.scheduledRoom,
+                theatres: this.getTheatres(timeSlotSession.scheduledRoom),
 
                 speakerName: hasSpeaker ? speaker.fullName : null,
                 speakerTitle: hasSpeaker ? speaker.tagLine : null,
@@ -230,6 +231,74 @@ export class DataService {
 
     private getTimeId(time: string): string {
         return `T${time.replace(/[^A-Za-z\d]/ig, '')}`;
+    }
+
+    private getTheatres(room: string): TheatreModel[] {
+        switch ((room || '').toLowerCase()) {
+            case 'hmb':
+                return [
+                    { theatre: '1' },
+                    { theatre: '2' },
+                    { theatre: '3', speaker: true }
+                ] as TheatreModel[];
+
+            case 'leading edge':
+                return [
+                    { theatre: '4', speaker: true },
+                    { theatre: '5' },
+                    { theatre: '6' },
+                    { theatre: '7' },
+                    { theatre: '8' },
+                    { theatre: '9' }
+                ] as TheatreModel[];
+
+            case 'oclc':
+                return [
+                    { theatre: '10' },
+                    { theatre: '11' },
+                    { theatre: '15', speaker: true }
+                ] as TheatreModel[];
+
+            case 'mpw':
+                return [
+                    { theatre: '12' },
+                    { theatre: '13' },
+                    { theatre: '14', speaker: true }
+                ] as TheatreModel[];
+
+            case 'sogeti':
+                return [
+                    { theatre: '16', speaker: true },
+                    { theatre: '20' },
+                    { theatre: '21' }
+                ] as TheatreModel[];
+
+            case 'pillar':
+                return [
+                    { theatre: '17', speaker: true },
+                    { theatre: '18' },
+                    { theatre: '19' }
+                ] as TheatreModel[];
+
+            case 'manifest':
+                return [
+                    { theatre: '23' },
+                    { theatre: '24' },
+                    { theatre: '25' },
+                    { theatre: '26' },
+                    { theatre: '27', speaker: true }
+                ] as TheatreModel[];
+
+                case 'root':
+                    return [
+                        { theatre: '28', speaker: true },
+                        { theatre: '29' },
+                        { theatre: '30' }
+                    ] as TheatreModel[];
+
+            default:
+                return [] as TheatreModel[];
+        }
     }
 }
 

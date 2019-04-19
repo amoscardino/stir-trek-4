@@ -4,19 +4,14 @@
 
 <div class="navbar navbar-light bg-white border rounded mb-4 shadow-sm">
     <div class="form-inline">
-        <button type="button"
-                class="btn btn-outline-secondary"
-                (click)="backToList()">
+        <button type="button" class="btn btn-outline-secondary" (click)="backToList()">
             Back
         </button>
     </div>
 
     <div class="form-inline">
-        <button type="button"
-                class="btn"
-                [class.btn-success]="session.isSaved"
-                [class.btn-primary]="!session.isSaved"
-                (click)="toggleSaved()">
+        <button type="button" class="btn" [class.btn-success]="session.isSaved" [class.btn-primary]="!session.isSaved"
+            (click)="toggleSaved()">
             {{ session.isSaved ? 'Saved' : 'Save' }}
         </button>
     </div>
@@ -54,6 +49,18 @@
                     </div>
                 </div>
 
+                <div class="list-group-item" *ngIf="session.track">
+                    <div class="d-flex w-100 justify-content-between">
+                        <strong class="mr-3">
+                            Track
+                        </strong>
+
+                        <span class="text-right">
+                            {{ session.track }}
+                        </span>
+                    </div>
+                </div>
+
                 <div class="list-group-item">
                     <div class="d-flex w-100 justify-content-between">
                         <strong class="mr-3">
@@ -67,14 +74,22 @@
                     </div>
                 </div>
 
-                <div class="list-group-item">
+                <div class="list-group-item" *ngIf="session.theatres.length">
                     <div class="d-flex w-100 justify-content-between">
                         <strong class="mr-3">
-                            Track
+                            Theaters
                         </strong>
 
                         <span class="text-right">
-                            {{ session.track }}
+                            <span *ngFor="let theatre of session.theatres">
+                                <strong *ngIf="theatre.speaker">
+                                    {{ theatre.theatre }}
+                                </strong>
+
+                                <span *ngIf="!theatre.speaker">
+                                    {{ theatre.theatre }}
+                                </span>
+                            </span>
                         </span>
                     </div>
                 </div>
@@ -91,10 +106,8 @@
             </div>
 
             <div class="card-body">
-                <img *ngIf="session.speakerImage"
-                     [src]="session.speakerImage"
-                     [alt]="session.speakerName"
-                     class="img-fluid rounded-circle w-75 mx-auto d-block mb-4" />
+                <img *ngIf="session.speakerImage" [src]="session.speakerImage" [alt]="session.speakerName"
+                    class="img-fluid rounded-circle w-75 mx-auto d-block mb-4" />
 
                 <strong class="d-block">{{ session.speakerName }}</strong>
                 {{ session.speakerTitle }}
@@ -103,7 +116,7 @@
     </div>
 
     <div [class.col-md-6]="session.speakerLinks !== null && session.speakerLinks.length"
-         [class.col-md-9]="session.speakerLinks === null || !session.speakerLinks.length">
+        [class.col-md-9]="session.speakerLinks === null || !session.speakerLinks.length">
         <div class="card mb-4 shadow-sm">
             <div class="card-header">
                 Speaker Bio
@@ -122,9 +135,8 @@
             </div>
 
             <div class="list-group list-group-flush">
-                <a *ngFor="let link of session.speakerLinks"
-                   class="list-group-item list-group-item-action"
-                   [href]="link.url" target="_blank">
+                <a *ngFor="let link of session.speakerLinks" class="list-group-item list-group-item-action"
+                    [href]="link.url" target="_blank">
                     {{ link.title }}
                 </a>
             </div>

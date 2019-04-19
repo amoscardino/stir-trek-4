@@ -12,8 +12,9 @@ export interface SessionModel {
 
     time: string;
     timeId: string;
-    room: string;
     track: string;
+    room: string;
+    theatres: TheatreModel[];
 
     speakerName: string;
     speakerTitle: string;
@@ -22,6 +23,11 @@ export interface SessionModel {
     speakerLinks?: SpeakerLinkModel[];
 
     isSaved: boolean;
+}
+
+export interface TheatreModel {
+    theatre: string;
+    speaker: boolean;
 }
 
 export interface SpeakerLinkModel {
