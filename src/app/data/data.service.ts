@@ -242,7 +242,7 @@ export class DataService {
                     { theatre: '3', speaker: true }
                 ] as TheatreModel[];
 
-            case 'leading edge':
+            case 'leading edje':
                 return [
                     { theatre: '4', speaker: true },
                     { theatre: '5' },
@@ -289,12 +289,12 @@ export class DataService {
                     { theatre: '27', speaker: true }
                 ] as TheatreModel[];
 
-                case 'root':
-                    return [
-                        { theatre: '28', speaker: true },
-                        { theatre: '29' },
-                        { theatre: '30' }
-                    ] as TheatreModel[];
+            case 'root':
+                return [
+                    { theatre: '28', speaker: true },
+                    { theatre: '29' },
+                    { theatre: '30' }
+                ] as TheatreModel[];
 
             default:
                 return [] as TheatreModel[];
